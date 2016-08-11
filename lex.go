@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 )
 
-// A lexer holds the state for lexing statements
+// Lexer holds the state for lexing statements
 type Lexer struct {
 	Text       string  // The raw input text
 	Pos        int     // The current byte offset in the text
@@ -22,14 +22,18 @@ type Token interface {
 	Text() string
 }
 
+// TextToken is a generic token that can be easily embedded into
+// custom token types to meet the Token interface
 type TextToken struct {
 	text string
 }
 
+// SetText sets the text value of a TextToken
 func (t *TextToken) SetText(text string) {
 	t.text = text
 }
 
+// Text gets the text value of a TextToken
 func (t *TextToken) Text() string {
 	return t.text
 }
@@ -56,7 +60,7 @@ func (l *Lexer) Run(initial LexFn) []Token {
 	return l.Tokens
 }
 
-// next gets the next rune in the input and updates the lexer state
+// Next gets the next rune in the input and updates the lexer state
 func (l *Lexer) Next() rune {
 	r, w := utf8.DecodeRuneInString(l.Text[l.Pos:])
 
@@ -69,13 +73,13 @@ func (l *Lexer) Next() rune {
 	return r
 }
 
-// backup moves the lexer back one rune
+// Backup moves the lexer back one rune
 // can only be used once per call of next()
 func (l *Lexer) Backup() {
 	l.Pos -= l.Width
 }
 
-// peek returns the next rune in the input
+// Peek returns the next rune in the input
 // without moving the internal pointer
 func (l *Lexer) Peek() rune {
 	r := l.Next()
@@ -83,12 +87,12 @@ func (l *Lexer) Peek() rune {
 	return r
 }
 
-// ignore skips the current token
+// Ignore skips the current token
 func (l *Lexer) Ignore() {
 	l.TokenStart = l.Pos
 }
 
-// emit adds the current token to the token slice and
+// Emit adds the current token to the token slice and
 // moves the tokenStart pointer to the current position
 func (l *Lexer) Emit(t Token) {
 	t.SetText(l.Text[l.TokenStart:l.Pos])
@@ -97,7 +101,7 @@ func (l *Lexer) Emit(t Token) {
 	l.Tokens = append(l.Tokens, t)
 }
 
-// accept moves the pointer if the next rune is in
+// Accept moves the pointer if the next rune is in
 // the set of valid runes
 func (l *Lexer) Accept(valid string) bool {
 	if strings.ContainsRune(valid, l.Next()) {
@@ -107,7 +111,7 @@ func (l *Lexer) Accept(valid string) bool {
 	return false
 }
 
-// acceptRun continually accepts runes from the
+// AcceptRun continually accepts runes from the
 // set of valid runes
 func (l *Lexer) AcceptRun(valid string) {
 	for strings.ContainsRune(valid, l.Next()) {
@@ -115,11 +119,11 @@ func (l *Lexer) AcceptRun(valid string) {
 	l.Backup()
 }
 
-// a runeCheck is a function that determines if a rune is valid
+// RuneCheck is a function that determines if a rune is valid
 // or not so that we can do complex checks against runes
 type RuneCheck func(rune) bool
 
-// acceptFunc accepts a rune if the provided runeCheck
+// AcceptFunc accepts a rune if the provided runeCheck
 // function returns true
 func (l *Lexer) AcceptFunc(fn RuneCheck) {
 	if fn(l.Next()) {
@@ -128,7 +132,7 @@ func (l *Lexer) AcceptFunc(fn RuneCheck) {
 	l.Backup()
 }
 
-// acceptRunFunc continually accepts runes for as long
+// AcceptRunFunc continually accepts runes for as long
 // as the runeCheck function returns true
 func (l *Lexer) AcceptRunFunc(fn RuneCheck) {
 	for fn(l.Next()) {
@@ -136,7 +140,7 @@ func (l *Lexer) AcceptRunFunc(fn RuneCheck) {
 	l.Backup()
 }
 
-// acceptUntil accepts runes until it hits a delimiter
+// AcceptUntil accepts runes until it hits a delimiter
 // rune contained in the provided string
 func (l *Lexer) AcceptUntil(delims string) {
 	for !strings.ContainsRune(delims, l.Next()) {
@@ -147,7 +151,7 @@ func (l *Lexer) AcceptUntil(delims string) {
 	l.Backup()
 }
 
-// acceptUntilUnescaped accepts runes until it hits a delimiter
+// AcceptUntilUnescaped accepts runes until it hits a delimiter
 // rune contained in the provided string, unless that rune was
 // escaped with a backslash
 func (l *Lexer) AcceptUntilUnescaped(delims string) {

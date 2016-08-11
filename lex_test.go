@@ -23,7 +23,7 @@ func TestAccept(t *testing.T) {
 	})
 
 	if len(ts) != 1 {
-		t.Fatalf("have length %s; want 1", len(ts))
+		t.Fatalf("have length %d; want 1", len(ts))
 	}
 
 	if ts[0].Text() != "abc" {
@@ -72,7 +72,7 @@ func TestPeek(t *testing.T) {
 	})
 
 	if len(ts) != 1 {
-		t.Fatalf("have length %s; want 1", len(ts))
+		t.Fatalf("have length %d; want 1", len(ts))
 	}
 
 	if ts[0].Text() != "ab" {
@@ -94,7 +94,7 @@ func TestIgnore(t *testing.T) {
 	})
 
 	if len(ts) != 1 {
-		t.Fatalf("have length %s; want 1", len(ts))
+		t.Fatalf("have length %d; want 1", len(ts))
 	}
 
 	if ts[0].Text() != "bc" {
@@ -120,7 +120,7 @@ func TestAcceptFunc(t *testing.T) {
 	})
 
 	if len(ts) != 1 {
-		t.Fatalf("have length %s; want 1", len(ts))
+		t.Fatalf("have length %d; want 1", len(ts))
 	}
 
 	if ts[0].Text() != "a" {
@@ -140,7 +140,7 @@ func TestAcceptRunFunc(t *testing.T) {
 	})
 
 	if len(ts) != 1 {
-		t.Fatalf("have length %s; want 1", len(ts))
+		t.Fatalf("have length %d; want 1", len(ts))
 	}
 
 	if ts[0].Text() != "123" {
@@ -162,7 +162,7 @@ func TestAcceptUntil(t *testing.T) {
 	})
 
 	if len(ts) != 2 {
-		t.Fatalf("have length %s; want 2", len(ts))
+		t.Fatalf("have length %d; want 2", len(ts))
 	}
 
 	if ts[0].Text() != "123" {
@@ -188,7 +188,7 @@ func TestAcceptUntilUnescaped(t *testing.T) {
 	})
 
 	if len(ts) != 2 {
-		t.Fatalf("have length %s; want 2", len(ts))
+		t.Fatalf("have length %d; want 2", len(ts))
 	}
 
 	if ts[0].Text() != `123\"abc` {

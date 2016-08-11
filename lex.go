@@ -38,7 +38,11 @@ func (t *TextToken) Text() string {
 	return t.text
 }
 
-// A LexFn accepts a pointer to a lexer,
+// A LexFn does the meat of the work. It accepts a pointer
+// to a Lexer, manipulates its state in some way, e.g. accepts
+// runes and emits tokens, and then returns a new LexFn
+// to deal with the next stage of the lexing - or nil if
+// no lexing is left to be done.
 type LexFn func(*Lexer) LexFn
 
 // New returns a new Lexer for the provided input string
@@ -120,7 +124,9 @@ func (l *Lexer) AcceptRun(valid string) {
 }
 
 // RuneCheck is a function that determines if a rune is valid
-// or not so that we can do complex checks against runes
+// or not when using AcceptFunc or AcceptRunFunc. Some functions
+// in the standard library, such as unicode.IsNumber() meet
+// this interface already.
 type RuneCheck func(rune) bool
 
 // AcceptFunc accepts a rune if the provided runeCheck

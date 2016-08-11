@@ -1,5 +1,7 @@
 # rplex
 
+[![Build Status](https://travis-ci.org/tomnomnom/rplex.svg?branch=master)](https://travis-ci.org/tomnomnom/rplex)
+
 rplex is a simple general purpose lexer library inspired by the talk [Lexical Scanning in Go](https://www.youtube.com/watch?v=HxaD_trXwRE) by Rob Pike.
 
 At this stage it's just a toy.

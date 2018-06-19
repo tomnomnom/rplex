@@ -161,14 +161,22 @@ func (l *Lexer) AcceptUntil(delims string) {
 // rune contained in the provided string, unless that rune was
 // escaped with a backslash
 func (l *Lexer) AcceptUntilUnescaped(delims string) {
+
 	// Read until we hit an unescaped rune or the end of the input
+	inEscape := false
 	for {
-		if strings.ContainsRune(delims, l.Next()) && l.Prev != '\\' {
+		r := l.Next()
+		if r == '\\' && !inEscape {
+			inEscape = true
+			continue
+		}
+		if strings.ContainsRune(delims, r) && !inEscape {
 			l.Backup()
 			return
 		}
 		if l.Cur == utf8.RuneError {
 			return
 		}
+		inEscape = false
 	}
 }
